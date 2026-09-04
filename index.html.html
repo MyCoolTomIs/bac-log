@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Elimination rate log</title>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Elim rate">
+<meta name="theme-color" content="#DCE2E5">
+<link rel="apple-touch-icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALQAAAC0CAIAAACyr5FlAAADmklEQVR42u3cPW4TQRiAYQe5p8sFUqahThcJRYiekgO45CQuOUBK9whFSOlS5yq5QQpLJlp7Z9fe2d3Z+Z63gkggZD/6Zn9muLq+uV1Jp/rkIxAcgkNwCA7BITgEh+AQHIJDgkNwCA7BITgEh+AQHIJDcEhwCA7BITgEh+AQHIJDcAgOCQ7BITgEh+AQHIJDcKiW1ln+lq/fvu9/8e/vH5+pySE4BIc01jXHoZfnp4+/vbt/8BGbHK1WGlwER2qcKBCOPt89HxFx9P/W+bCsCI6LhoHhYXIIDsEhOKSsOM59Ov74+rbZ7nzoJkdrm+0OkRA4+g+Px9e3BhGffv2To4+PhgwjxLLyX8/vXz8Sq4yvISKOu/uHw1xJ+0CkwK6ub26H/y1nbTBOOEgAUoi7FSMEjg4frkIsK5cvMY0ZY3dqOBx9rkISL/oRqXBZ6X8Vkt4CYoNI/TjarkJ+fvnc+Qf5qB/H8QjpI4OPQDg6b2QUGse5Y8PwCIdDcAgOwSE4puiC3am+S5OjNa/rAuG4YHeqN/6BJsdlu1P5iLKspH20XWrwkaV1+f/EvY/Efo6TFDbbncfwAytiP8eoV6OIRL9bsekQDj7gGOCjjQgf0XGkR4inIHBYYuDgw63seHe5Bz1OxMTFkfCR2IyIyCrIfo6TS0x6m6pNqas4m30aPpyIgaPpY0/EiRg4zr6LUXQc/r92OASH4BAcgmPWnIiBI2dhX9RFxOFEDBxDfTgRE3dZcSKms/UqcE7EpAuxn2Okq9Hqibhb6SjydkM4+IBjsI+AJ2LgyDBCan0KAoclBg4+3MqWcJdbzYkYOEbxUceJGMtK/iWmmhMxcGT2UdOJGDjy+KjyRAwcU9zFuJWNXn0nYuAQHIJDcAiORVXfiRg45qzwF3VwzDM8FnEiBo4ZfCzlRAwcU/tY0IkYOMbycUxk/8MF7RWyn6PEq9FCXtOYHLNV/giBgw84+IBjoT7KPDEFR+kjZManZHBYYuDgAw4+MuYhWLl1PiUb+0SdybHIEfLy/HS8P/nkD+GI5WOyE3VwLMzHlCfq4FiGj1lO1MFRwyWIW9noTX+iDg7BITgEh+DQh859Oj78aTocgiPY8MjyEg6OCn3kej0LR20+Mr64X/usl+tj7P0ccAS6f7GsqNTJcdgvqHnLsl/T5NDIOOwrrrI8u89lcggOCQ7BITgEh+AQHIJDcAgOwSE4JDgEh+AQHIJDcGhJvQMQcJzqtZ8F9QAAAABJRU5ErkJggg==">
+<link rel="icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALQAAAC0CAIAAACyr5FlAAADmklEQVR42u3cPW4TQRiAYQe5p8sFUqahThcJRYiekgO45CQuOUBK9whFSOlS5yq5QQpLJlp7Z9fe2d3Z+Z63gkggZD/6Zn9muLq+uV1Jp/rkIxAcgkNwCA7BITgEh+AQHIJDgkNwCA7BITgEh+AQHIJDcEhwCA7BITgEh+AQHIJDcAgOCQ7BITgEh+AQHIJDcKiW1ln+lq/fvu9/8e/vH5+pySE4BIc01jXHoZfnp4+/vbt/8BGbHK1WGlwER2qcKBCOPt89HxFx9P/W+bCsCI6LhoHhYXIIDsEhOKSsOM59Ov74+rbZ7nzoJkdrm+0OkRA4+g+Px9e3BhGffv2To4+PhgwjxLLyX8/vXz8Sq4yvISKOu/uHw1xJ+0CkwK6ub26H/y1nbTBOOEgAUoi7FSMEjg4frkIsK5cvMY0ZY3dqOBx9rkISL/oRqXBZ6X8Vkt4CYoNI/TjarkJ+fvnc+Qf5qB/H8QjpI4OPQDg6b2QUGse5Y8PwCIdDcAgOwSE4puiC3am+S5OjNa/rAuG4YHeqN/6BJsdlu1P5iLKspH20XWrwkaV1+f/EvY/Efo6TFDbbncfwAytiP8eoV6OIRL9bsekQDj7gGOCjjQgf0XGkR4inIHBYYuDgw63seHe5Bz1OxMTFkfCR2IyIyCrIfo6TS0x6m6pNqas4m30aPpyIgaPpY0/EiRg4zr6LUXQc/r92OASH4BAcgmPWnIiBI2dhX9RFxOFEDBxDfTgRE3dZcSKms/UqcE7EpAuxn2Okq9Hqibhb6SjydkM4+IBjsI+AJ2LgyDBCan0KAoclBg4+3MqWcJdbzYkYOEbxUceJGMtK/iWmmhMxcGT2UdOJGDjy+KjyRAwcU9zFuJWNXn0nYuAQHIJDcAiORVXfiRg45qzwF3VwzDM8FnEiBo4ZfCzlRAwcU/tY0IkYOMbycUxk/8MF7RWyn6PEq9FCXtOYHLNV/giBgw84+IBjoT7KPDEFR+kjZManZHBYYuDgAw4+MuYhWLl1PiUb+0SdybHIEfLy/HS8P/nkD+GI5WOyE3VwLMzHlCfq4FiGj1lO1MFRwyWIW9noTX+iDg7BITgEh+DQh859Oj78aTocgiPY8MjyEg6OCn3kej0LR20+Mr64X/usl+tj7P0ccAS6f7GsqNTJcdgvqHnLsl/T5NDIOOwrrrI8u89lcggOCQ7BITgEh+AQHIJDcAgOwSE4JDgEh+AQHIJDcGhJvQMQcJzqtZ8F9QAAAABJRU5ErkJggg==">
+<link rel="manifest" id="mf">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#DCE2E5;
+  --panel:#F4F6F7;
+  --ink:#16232B;
+  --ink-soft:#5A6B75;
+  --rule:#AAB8BF;
+  --trace:#1F5F8B;
+  --excluded:#B8860B;
+  --band:#1F5F8B;
+  --warn:#9C3B1B;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  background:var(--paper);
+  color:var(--ink);
+  font-family:'Archivo',system-ui,sans-serif;
+  font-size:16px;
+  line-height:1.5;
+  -webkit-text-size-adjust:100%;
+}
+.wrap{max-width:640px;margin:0 auto;padding:20px 16px 64px}
+h1{
+  font-size:22px;font-weight:600;letter-spacing:-0.01em;
+  margin:0 0 2px;
+}
+.sub{color:var(--ink-soft);font-size:14px;margin:0 0 22px;max-width:52ch}
+.panel{
+  background:var(--panel);
+  border:1px solid var(--rule);
+  padding:16px;
+  margin-bottom:16px;
+}
+.readout{
+  display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;
+  border-bottom:1px solid var(--rule);
+  padding-bottom:12px;margin-bottom:12px;
+}
+.rate{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:34px;font-weight:500;letter-spacing:-0.02em;
+  line-height:1;
+}
+.rate.none{font-size:19px;color:var(--ink-soft)}
+.rate-unit{font-size:13px;color:var(--ink-soft)}
+.stat-row{display:flex;gap:20px;flex-wrap:wrap;font-size:13px;color:var(--ink-soft)}
+.stat b{
+  font-family:'IBM Plex Mono',monospace;
+  font-weight:500;color:var(--ink);display:block;font-size:15px;
+}
+svg{display:block;width:100%;height:auto;touch-action:none}
+.note{
+  font-size:13px;line-height:1.45;color:var(--ink-soft);
+  border-left:2px solid var(--rule);padding-left:10px;margin-top:12px;
+}
+.note.flag{border-left-color:var(--warn);color:var(--warn)}
+label{display:block;font-size:13px;color:var(--ink-soft);margin-bottom:4px}
+input,select{
+  font-family:'IBM Plex Mono',monospace;font-size:16px;
+  padding:9px 10px;width:100%;
+  background:#fff;color:var(--ink);
+  border:1px solid var(--rule);border-radius:0;
+}
+input:focus,select:focus,button:focus{outline:2px solid var(--trace);outline-offset:1px}
+.field{margin-bottom:12px}
+.pair{display:flex;gap:10px}
+.pair .field{flex:1}
+button{
+  font-family:'Archivo',sans-serif;font-size:15px;font-weight:500;
+  padding:11px 16px;border:1px solid var(--ink);
+  background:var(--ink);color:var(--panel);cursor:pointer;
+}
+button.ghost{background:transparent;color:var(--ink)}
+button.wide{width:100%}
+button:disabled{opacity:.4;cursor:default}
+table{width:100%;border-collapse:collapse;font-size:14px;margin-top:4px}
+th{
+  text-align:left;font-weight:500;font-size:12px;color:var(--ink-soft);
+  border-bottom:1px solid var(--rule);padding:5px 6px 5px 0;
+}
+td{
+  padding:7px 6px 7px 0;border-bottom:1px solid #E2E7E9;
+  font-family:'IBM Plex Mono',monospace;
+}
+td.tag{font-family:'Archivo',sans-serif;font-size:12px;color:var(--ink-soft)}
+td.tag.up{color:var(--excluded)}
+td:last-child{width:26px;text-align:right}
+.x{
+  background:none;border:0;color:var(--ink-soft);
+  font-size:17px;padding:2px 4px;cursor:pointer;
+}
+h2{font-size:15px;font-weight:600;margin:0 0 10px}
+.session-row{
+  display:flex;justify-content:space-between;align-items:center;gap:10px;
+  padding:11px 0;border-bottom:1px solid #E2E7E9;cursor:pointer;
+}
+.session-row:last-child{border-bottom:0}
+.session-row.active{font-weight:500}
+.session-row .r{font-family:'IBM Plex Mono',monospace;font-size:14px}
+.session-row .r.dim{color:var(--ink-soft)}
+.empty{color:var(--ink-soft);font-size:14px}
+.foot{font-size:12px;color:var(--ink-soft);line-height:1.5;margin-top:24px}
+.clock{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:44px;font-weight:500;letter-spacing:-0.02em;line-height:1;
+  margin:2px 0 14px;
+}
+.clock.done{color:var(--warn)}
+.clock.idle{color:var(--ink-soft)}
+.presets{display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap}
+.presets button{
+  flex:1;min-width:56px;padding:9px 4px;font-size:14px;
+  background:transparent;color:var(--ink);border:1px solid var(--rule);
+}
+.presets button.on{background:var(--ink);color:var(--panel);border-color:var(--ink)}
+.tctl{display:flex;gap:8px}
+.tctl button{flex:1}
+@media (prefers-reduced-motion:no-preference){
+  .rate{transition:opacity .18s ease}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<h1>Elimination rate log</h1>
+<p class="sub">Timestamped breathalyzer readings, fitted across the descending phase. Rising readings are logged but excluded from the fit.</p>
+
+<div class="panel" id="current">
+  <div id="readout"></div>
+  <div id="chart"></div>
+  <div id="notes"></div>
+</div>
+
+<div class="panel">
+  <h2>Next reading in</h2>
+  <div class="clock idle" id="clock">45:00</div>
+  <div class="presets" id="presets">
+    <button data-min="20">20</button>
+    <button data-min="30">30</button>
+    <button data-min="45">45</button>
+    <button data-min="60">60</button>
+  </div>
+  <div class="field">
+    <label for="custom">Custom interval, minutes</label>
+    <input type="number" id="custom" min="1" max="240" step="1" placeholder="45">
+  </div>
+  <div class="tctl">
+    <button id="startstop" data-act="startstop">Start</button>
+    <button class="ghost" id="reset" data-act="reset">Reset</button>
+  </div>
+  <div class="note" id="timernote">The timer restarts on its own each time you log a reading. It keeps counting if you leave the page, but iOS will not alert you with the screen locked, so set a Clock alarm as backup for long descent gaps.</div>
+</div>
+
+<div class="panel">
+  <h2>Add a reading</h2>
+  <div class="pair">
+    <div class="field">
+      <label for="t">Time</label>
+      <input type="time" id="t">
+    </div>
+    <div class="field">
+      <label for="b">BAC</label>
+      <input type="text" id="b" inputmode="decimal" placeholder="0.062">
+    </div>
+  </div>
+  <button class="wide" id="add" data-act="add">Log reading</button>
+  <div class="note" id="addnote"></div>
+</div>
+
+<div class="panel">
+  <h2>This session</h2>
+  <div id="table"></div>
+  <div class="field" style="margin-top:14px">
+    <label for="ld">Last drink (optional, used to flag pre-peak readings)</label>
+    <input type="time" id="ld">
+  </div>
+  <button class="ghost wide" id="newsession" data-act="newsession">Start a new session</button>
+</div>
+
+<div class="panel">
+  <h2>All sessions</h2>
+  <div id="sessions"></div>
+  <div id="agg"></div>
+</div>
+
+<p class="foot">Fuel cell meter only. Wait 15 minutes after any sip or mouth alcohol reads high. A fit needs at least two points past the peak; three or more lets it check whether the descent is actually straight.</p>
+
+</div>
+
+<script>
+const KEY='bac-sessions';
+let state={sessions:[],activeId:null};
+
+// Build the web app manifest inline so this stays a single file.
+try{
+  const mf={name:'Elimination rate log',short_name:'Elim rate',display:'standalone',
+    background_color:'#DCE2E5',theme_color:'#DCE2E5',start_url:'.',
+    icons:[{src:document.querySelector('link[rel="apple-touch-icon"]').href,
+      sizes:'180x180',type:'image/png'}]};
+  document.getElementById('mf').href=
+    'data:application/manifest+json,'+encodeURIComponent(JSON.stringify(mf));
+}catch(e){}
+
+function uid(){return 's'+Date.now().toString(36)+Math.random().toString(36).slice(2,6)}
+function todayISO(){const d=new Date();return d.toISOString().slice(0,10)}
+function fmtDate(iso){
+  const [y,m,d]=iso.split('-');
+  return new Date(y,m-1,d).toLocaleDateString(undefined,{month:'short',day:'numeric'});
+}
+function fmtClock(ms){
+  return new Date(ms).toLocaleTimeString(undefined,{hour:'numeric',minute:'2-digit'});
+}
+
+function load(){
+  try{
+    const raw=localStorage.getItem(KEY);
+    if(raw)state=JSON.parse(raw);
+  }catch(e){/* first run, or storage blocked */}
+  if(!state.sessions)state.sessions=[];
+  if(!state.sessions.length)newSession(false);
+  if(!state.activeId)state.activeId=state.sessions[0].id;
+  render();
+}
+function save(){
+  try{localStorage.setItem(KEY,JSON.stringify(state))}
+  catch(e){flash('Reading kept on screen but not saved. Storage is blocked in this browser mode.')}
+}
+function flash(msg){
+  const n=document.getElementById('addnote');
+  n.textContent=msg;n.className='note flag';
+}
+
+function active(){return state.sessions.find(s=>s.id===state.activeId)}
+
+function newSession(doSave=true){
+  const s={id:uid(),date:todayISO(),readings:[],lastDrink:null};
+  state.sessions.unshift(s);
+  state.activeId=s.id;
+  if(doSave){save();render()}
+}
+
+// Times are stored as absolute ms. A clock time earlier than the previous
+// reading is treated as after midnight and rolled to the next day.
+function toMs(sess,hhmm){
+  const [y,m,d]=sess.date.split('-').map(Number);
+  const [hh,mm]=hhmm.split(':').map(Number);
+  let t=new Date(y,m-1,d,hh,mm).getTime();
+  const prev=sess.readings.length?sess.readings[sess.readings.length-1].t:null;
+  const ref=prev!==null?prev:(sess.lastDrink!==null?sess.lastDrink:null);
+  if(ref!==null&&t<ref)t+=864e5;
+  return t;
+}
+
+function analyse(sess){
+  const r=[...sess.readings].sort((a,b)=>a.t-b.t);
+  const out={readings:r,rate:null,r2:null,fit:null,peakIdx:-1,used:[],flags:[]};
+  if(!r.length)return out;
+
+  let peak=0;
+  r.forEach((p,i)=>{if(p.bac>r[peak].bac)peak=i});
+  out.peakIdx=peak;
+
+  // Descending set: peak onward, minus any trailing zeros (a floor, not a rate)
+  let desc=r.slice(peak);
+  while(desc.length>2&&desc[desc.length-1].bac<=0&&desc[desc.length-2].bac<=0)desc.pop();
+  out.used=desc.map(p=>p.t);
+
+  if(peak===r.length-1){
+    out.flags.push({t:'flag',m:'Still rising, or the peak is your latest reading. Take another in 30 to 45 minutes to get a descent.'});
+    return out;
+  }
+  if(desc.length<2)return out;
+
+  const t0=desc[0].t;
+  const xs=desc.map(p=>(p.t-t0)/36e5), ys=desc.map(p=>p.bac);
+  const n=xs.length;
+  const mx=xs.reduce((a,b)=>a+b,0)/n, my=ys.reduce((a,b)=>a+b,0)/n;
+  let num=0,den=0;
+  for(let i=0;i<n;i++){num+=(xs[i]-mx)*(ys[i]-my);den+=(xs[i]-mx)**2}
+  if(den===0)return out;
+  const slope=num/den, icpt=my-slope*mx;
+  out.fit={slope,icpt,t0};
+  out.rate=-slope;
+
+  if(n>=3){
+    let ssr=0,sst=0;
+    for(let i=0;i<n;i++){ssr+=(ys[i]-(slope*xs[i]+icpt))**2;sst+=(ys[i]-my)**2}
+    out.r2=sst>0?1-ssr/sst:null;
+  }
+
+  // Flags
+  if(out.rate<=0)
+    out.flags.push({t:'flag',m:'Slope is flat or rising across the points after the peak. Something is off: check for a mouth alcohol spike or a mistyped value.'});
+  if(sess.lastDrink!==null){
+    const gap=(r[peak].t-sess.lastDrink)/36e5;
+    if(gap<1)
+      out.flags.push({t:'flag',m:'Peak is under an hour after your last drink, so you may still have been absorbing. The rate below is likely an underestimate.'});
+  }
+  if(n===2)
+    out.flags.push({t:'',m:'Two points give a slope but no way to check it is straight. A third reading in between would confirm it.'});
+  if(out.r2!==null&&out.r2<0.95)
+    out.flags.push({t:'',m:'The descent is not very straight. Usually means one reading is off or the earliest point was still near the peak.'});
+  if(peak>0)
+    out.flags.push({t:'',m:(peak===1?'1 reading':peak+' readings')+' before the peak excluded from the fit.'});
+  return out;
+}
+
+function renderChart(sess,a){
+  const el=document.getElementById('chart');
+  if(a.readings.length<1){
+    el.innerHTML='<p class="empty">No readings yet. Log one to start the trace.</p>';return;
+  }
+  const W=600,H=300,L=48,R=14,T=16,B=34;
+  const r=a.readings;
+  const t0=r[0].t;
+  let maxH=Math.max(1,(r[r.length-1].t-t0)/36e5);
+  const maxB=Math.max(0.10,Math.ceil(Math.max(...r.map(p=>p.bac))*100+1)/100);
+  // extend x to the projected zero crossing
+  let zeroH=null;
+  if(a.fit&&a.rate>0){
+    const last=r[r.length-1];
+    zeroH=(last.t-t0)/36e5+last.bac/a.rate;
+    maxH=Math.max(maxH,zeroH);
+  }
+  maxH=Math.max(maxH,1);
+  const X=h=>L+(h/maxH)*(W-L-R);
+  const Y=b=>T+(1-b/maxB)*(H-T-B);
+
+  let g='';
+  // target peak band, 0.05 to 0.08
+  g+=`<rect x="${L}" y="${Y(0.08)}" width="${W-L-R}" height="${Y(0.05)-Y(0.08)}" fill="var(--band)" opacity="0.07"/>`;
+  g+=`<text x="${W-R-4}" y="${Y(0.08)-4}" text-anchor="end" font-size="10" fill="var(--ink-soft)" font-family="Archivo">target peak 0.05 to 0.08</text>`;
+
+  for(let b=0;b<=maxB+1e-9;b+=0.02){
+    g+=`<line x1="${L}" y1="${Y(b)}" x2="${W-R}" y2="${Y(b)}" stroke="var(--rule)" stroke-width="0.5" opacity="0.6"/>`;
+    g+=`<text x="${L-7}" y="${Y(b)+4}" text-anchor="end" font-size="11" fill="var(--ink-soft)" font-family="IBM Plex Mono">${b.toFixed(2)}</text>`;
+  }
+  const step=maxH>8?2:1;
+  for(let h=0;h<=maxH;h+=step){
+    g+=`<line x1="${X(h)}" y1="${T}" x2="${X(h)}" y2="${H-B}" stroke="var(--rule)" stroke-width="0.5" opacity="0.4"/>`;
+    g+=`<text x="${X(h)}" y="${H-B+17}" text-anchor="middle" font-size="11" fill="var(--ink-soft)" font-family="IBM Plex Mono">${h}</text>`;
+  }
+  g+=`<text x="${(L+W-R)/2}" y="${H-4}" text-anchor="middle" font-size="11" fill="var(--ink-soft)" font-family="Archivo">hours from first reading</text>`;
+
+  // fitted line, drawn out to zero
+  if(a.fit&&a.rate>0){
+    const off=(a.fit.t0-t0)/36e5;
+    const y1=a.fit.icpt, x2=zeroH;
+    g+=`<line x1="${X(off)}" y1="${Y(y1)}" x2="${X(x2)}" y2="${Y(0)}" stroke="var(--trace)" stroke-width="1.5" stroke-dasharray="5 4"/>`;
+    g+=`<circle cx="${X(x2)}" cy="${Y(0)}" r="3" fill="none" stroke="var(--trace)" stroke-width="1.5"/>`;
+  }
+
+  // observed trace
+  const pts=r.map(p=>`${X((p.t-t0)/36e5)},${Y(p.bac)}`).join(' ');
+  g+=`<polyline points="${pts}" fill="none" stroke="var(--ink)" stroke-width="1.5" opacity="0.35"/>`;
+  r.forEach((p,i)=>{
+    const inFit=a.used.includes(p.t);
+    const cx=X((p.t-t0)/36e5),cy=Y(p.bac);
+    g+= inFit
+      ? `<circle cx="${cx}" cy="${cy}" r="4.5" fill="var(--trace)"/>`
+      : `<circle cx="${cx}" cy="${cy}" r="4.5" fill="var(--panel)" stroke="var(--excluded)" stroke-width="1.5"/>`;
+  });
+
+  el.innerHTML=`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="BAC readings over time with fitted elimination line">${g}</svg>`;
+}
+
+function render(){
+  const sess=active();
+  const a=analyse(sess);
+
+  // readout
+  let ro='<div class="readout">';
+  if(a.rate>0){
+    ro+=`<span class="rate">${a.rate.toFixed(4)}</span><span class="rate-unit">BAC per hour</span>`;
+  }else{
+    ro+=`<span class="rate none">Rate not measurable yet</span>`;
+  }
+  ro+='</div><div class="stat-row">';
+  ro+=`<span class="stat">points in fit<b>${a.used.length||0}</b></span>`;
+  if(a.r2!==null)ro+=`<span class="stat">straightness<b>${a.r2.toFixed(3)}</b></span>`;
+  if(a.peakIdx>=0&&a.readings.length)
+    ro+=`<span class="stat">peak<b>${a.readings[a.peakIdx].bac.toFixed(3)}</b></span>`;
+  if(a.rate>0&&a.readings.length){
+    const last=a.readings[a.readings.length-1];
+    ro+=`<span class="stat">projected 0.00<b>${fmtClock(last.t+(last.bac/a.rate)*36e5)}</b></span>`;
+  }
+  ro+='</div>';
+  document.getElementById('readout').innerHTML=ro;
+
+  renderChart(sess,a);
+
+  document.getElementById('notes').innerHTML=
+    a.flags.map(f=>`<div class="note ${f.t}">${f.m}</div>`).join('');
+
+  // table
+  const tb=document.getElementById('table');
+  if(!a.readings.length){
+    tb.innerHTML='<p class="empty">Readings for this session will appear here.</p>';
+  }else{
+    let h='<table><tr><th>Time</th><th>BAC</th><th></th><th></th></tr>';
+    a.readings.forEach((p,i)=>{
+      const rising=i<a.peakIdx;
+      const inFit=a.used.includes(p.t);
+      h+=`<tr><td>${fmtClock(p.t)}</td><td>${p.bac.toFixed(3)}</td>`
+       +`<td class="tag ${rising?'up':''}">${rising?'rising':(inFit?'in fit':'excluded')}</td>`
+       +`<td><button class="x" data-del="${p.t}" aria-label="Delete reading">&times;</button></td></tr>`;
+    });
+    tb.innerHTML=h+'</table>';
+  }
+
+  // session list
+  const sl=document.getElementById('sessions');
+  sl.innerHTML=state.sessions.map(s=>{
+    const r=analyse(s).rate;
+    return `<div class="session-row ${s.id===state.activeId?'active':''}" data-open="${s.id}">`
+      +`<span>${fmtDate(s.date)} <span class="r dim">${s.readings.length} readings</span></span>`
+      +`<span class="r ${r>0?'':'dim'}">${r>0?r.toFixed(4):'no fit'}</span></div>`;
+  }).join('');
+
+  const rates=state.sessions.map(s=>analyse(s).rate).filter(r=>r>0);
+  const ag=document.getElementById('agg');
+  if(rates.length>=2){
+    const mean=rates.reduce((a,b)=>a+b,0)/rates.length;
+    ag.innerHTML=`<div class="note">Mean across ${rates.length} sessions: `
+      +`<b>${mean.toFixed(4)}</b> per hour, spread ${Math.min(...rates).toFixed(4)} to ${Math.max(...rates).toFixed(4)}. `
+      +`Population range is roughly 0.012 to 0.020.</div>`;
+  }else ag.innerHTML='';
+
+  document.getElementById('ld').value=sess.lastDrink!==null
+    ? new Date(sess.lastDrink).toTimeString().slice(0,5) : '';
+}
+
+function addReading(){
+  const sess=active();
+  const t=document.getElementById('t').value;
+  const b=parseFloat(document.getElementById('b').value);
+  const n=document.getElementById('addnote');
+  if(!t){n.textContent='Enter the time of the reading.';n.className='note flag';return}
+  if(isNaN(b)||b<0||b>0.6){n.textContent='Enter a BAC between 0 and 0.6, like 0.062.';n.className='note flag';return}
+  sess.readings.push({t:toMs(sess,t),bac:b});
+  sess.readings.sort((x,y)=>x.t-y.t);
+  document.getElementById('b').value='';
+  n.textContent='';n.className='note';
+  save();render();
+  startTimer();
+}
+
+document.addEventListener('change',e=>{
+  if(e.target.id!=='ld')return;
+  const sess=active();
+  if(!e.target.value){sess.lastDrink=null}
+  else{
+    const [y,m,d]=sess.date.split('-').map(Number);
+    const [hh,mm]=e.target.value.split(':').map(Number);
+    sess.lastDrink=new Date(y,m-1,d,hh,mm).getTime();
+  }
+  save();render();
+});
+
+document.addEventListener('click',e=>{
+  const act=e.target.closest('[data-act]');
+  if(act){
+    const a=act.dataset.act;
+    if(a==='add')addReading();
+    else if(a==='newsession')newSession();
+    else if(a==='startstop')target===null?startTimer():stopTimer();
+    else if(a==='reset')startTimer();
+    return;
+  }
+  const min=e.target.closest('[data-min]');
+  if(min){
+    const c=document.getElementById('custom');
+    if(c)c.value='';
+    setMins(Number(min.dataset.min));
+    return;
+  }
+  const del=e.target.closest('[data-del]');
+  if(del){
+    const t=Number(del.dataset.del);
+    const sess=active();
+    sess.readings=sess.readings.filter(p=>p.t!==t);
+    save();render();return;
+  }
+  const op=e.target.closest('[data-open]');
+  if(op){state.activeId=op.dataset.open;save();render()}
+});
+
+/* ---- timer ---- */
+let mins=45, target=null, tick=null, fired=false;
+const clockEl=document.getElementById('clock');
+
+function drawClock(){
+  const ss=document.getElementById('startstop');
+  if(!clockEl||!ss)return;
+  if(target===null){
+    clockEl.textContent=String(mins).padStart(2,'0')+':00';
+    clockEl.className='clock idle';
+    ss.textContent='Start';
+    return;
+  }
+  let left=Math.round((target-Date.now())/1000);
+  ss.textContent='Pause';
+  if(left<=0){
+    const over=Math.abs(left);
+    clockEl.textContent='+'+String(Math.floor(over/60)).padStart(2,'0')+':'+String(over%60).padStart(2,'0');
+    clockEl.className='clock done';
+    if(!fired){fired=true;beep()}
+    return;
+  }
+  clockEl.textContent=String(Math.floor(left/60)).padStart(2,'0')+':'+String(left%60).padStart(2,'0');
+  clockEl.className='clock';
+}
+function startTimer(){
+  target=Date.now()+mins*60000;
+  fired=false;
+  if(tick)clearInterval(tick);
+  tick=setInterval(drawClock,250);
+  drawClock();
+}
+function stopTimer(){
+  if(tick)clearInterval(tick);
+  tick=null;target=null;fired=false;
+  drawClock();
+}
+function beep(){
+  try{
+    const ctx=new (window.AudioContext||window.webkitAudioContext)();
+    [0,0.35,0.7].forEach(d=>{
+      const o=ctx.createOscillator(),g=ctx.createGain();
+      o.connect(g);g.connect(ctx.destination);
+      o.frequency.value=880;o.type='sine';
+      g.gain.setValueAtTime(0.0001,ctx.currentTime+d);
+      g.gain.exponentialRampToValueAtTime(0.25,ctx.currentTime+d+0.02);
+      g.gain.exponentialRampToValueAtTime(0.0001,ctx.currentTime+d+0.25);
+      o.start(ctx.currentTime+d);o.stop(ctx.currentTime+d+0.3);
+    });
+  }catch(e){/* audio blocked, the visual state still changes */}
+}
+function setMins(m){
+  mins=m;
+  document.querySelectorAll('#presets button').forEach(b=>
+    b.classList.toggle('on',Number(b.dataset.min)===m));
+  if(target!==null)startTimer(); else drawClock();
+}
+document.addEventListener('input',e=>{
+  if(e.target.id!=='custom')return;
+  const v=parseInt(e.target.value,10);
+  if(v>0&&v<=240)setMins(v);
+});
+document.addEventListener('visibilitychange',()=>{if(!document.hidden)drawClock()});
+setMins(45);
+
+// default the time field to now
+document.getElementById('t').value=new Date().toTimeString().slice(0,5);
+load();
+</script>
+</body>
+</html>

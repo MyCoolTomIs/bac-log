@@ -73,6 +73,7 @@ svg{display:block;width:100%;height:auto;touch-action:none}
 }
 .note.flag{border-left-color:var(--warn);color:var(--warn)}
 label{display:block;font-size:13px;color:var(--ink-soft);margin-bottom:4px}
+input#label{font-family:'Archivo',sans-serif}
 input,select{
   font-family:'IBM Plex Mono',monospace;font-size:16px;
   padding:9px 10px;width:100%;
@@ -89,6 +90,7 @@ button{
   background:var(--ink);color:var(--panel);cursor:pointer;
 }
 button.ghost{background:transparent;color:var(--ink)}
+button.danger{color:var(--warn);border-color:var(--warn)}
 button.wide{width:100%}
 button:disabled{opacity:.4;cursor:default}
 table{width:100%;border-collapse:collapse;font-size:14px;margin-top:4px}
@@ -188,12 +190,17 @@ h2{font-size:15px;font-weight:600;margin:0 0 10px}
 
 <div class="panel">
   <h2>This session</h2>
+  <div class="field">
+    <label for="label">Name</label>
+    <input type="text" id="label" maxlength="40" placeholder="Controlled afternoon">
+  </div>
   <div id="table"></div>
   <div class="field" style="margin-top:14px">
     <label for="ld">Last drink (optional, used to flag pre-peak readings)</label>
     <input type="time" id="ld">
   </div>
   <button class="ghost wide" id="newsession" data-act="newsession">Start a new session</button>
+  <button class="ghost wide danger" data-act="delsession" style="margin-top:8px">Delete this session</button>
 </div>
 
 <div class="panel">
@@ -251,8 +258,22 @@ function flash(msg){
 
 function active(){return state.sessions.find(s=>s.id===state.activeId)}
 
+function deleteSession(){
+  const sess=active();
+  const name=sess.label||fmtDate(sess.date);
+  const n=sess.readings.length;
+  const msg=n
+    ? `Delete "${name}" and its ${n} reading${n>1?'s':''}? This cannot be undone.`
+    : `Delete "${name}"?`;
+  if(!confirm(msg))return;
+  state.sessions=state.sessions.filter(x=>x.id!==sess.id);
+  if(!state.sessions.length){newSession(false)}
+  state.activeId=state.sessions[0].id;
+  save();render();
+}
+
 function newSession(doSave=true){
-  const s={id:uid(),date:todayISO(),readings:[],lastDrink:null};
+  const s={id:uid(),date:todayISO(),readings:[],lastDrink:null,label:''};
   state.sessions.unshift(s);
   state.activeId=s.id;
   if(doSave){save();render()}
@@ -427,12 +448,24 @@ function render(){
     tb.innerHTML=h+'</table>';
   }
 
-  // session list
+  renderSessionList();
+
+  const lb=document.getElementById('label');
+  if(lb&&document.activeElement!==lb)lb.value=sess.label||'';
+
+  document.getElementById('ld').value=sess.lastDrink!==null
+    ? new Date(sess.lastDrink).toTimeString().slice(0,5) : '';
+}
+
+function renderSessionList(){
   const sl=document.getElementById('sessions');
   sl.innerHTML=state.sessions.map(s=>{
     const r=analyse(s).rate;
+    const name=s.label
+      ? `${esc(s.label)} <span class="r dim">${fmtDate(s.date)}</span>`
+      : fmtDate(s.date);
     return `<div class="session-row ${s.id===state.activeId?'active':''}" data-open="${s.id}">`
-      +`<span>${fmtDate(s.date)} <span class="r dim">${s.readings.length} readings</span></span>`
+      +`<span>${name} <span class="r dim">${s.readings.length} readings</span></span>`
       +`<span class="r ${r>0?'':'dim'}">${r>0?r.toFixed(4):'no fit'}</span></div>`;
   }).join('');
 
@@ -444,9 +477,10 @@ function render(){
       +`<b>${mean.toFixed(4)}</b> per hour, spread ${Math.min(...rates).toFixed(4)} to ${Math.max(...rates).toFixed(4)}. `
       +`Population range is roughly 0.012 to 0.020.</div>`;
   }else ag.innerHTML='';
+}
 
-  document.getElementById('ld').value=sess.lastDrink!==null
-    ? new Date(sess.lastDrink).toTimeString().slice(0,5) : '';
+function esc(t){
+  return t.replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 }
 
 function addReading(){
@@ -482,6 +516,7 @@ document.addEventListener('click',e=>{
     const a=act.dataset.act;
     if(a==='add')addReading();
     else if(a==='newsession')newSession();
+    else if(a==='delsession')deleteSession();
     else if(a==='startstop')target===null?startTimer():stopTimer();
     else if(a==='reset')startTimer();
     return;
@@ -562,6 +597,11 @@ function setMins(m){
   if(target!==null)startTimer(); else drawClock();
 }
 document.addEventListener('input',e=>{
+  if(e.target.id==='label'){
+    const sess=active();
+    if(sess){sess.label=e.target.value;save();renderSessionList()}
+    return;
+  }
   if(e.target.id!=='custom')return;
   const v=parseInt(e.target.value,10);
   if(v>0&&v<=240)setMins(v);
